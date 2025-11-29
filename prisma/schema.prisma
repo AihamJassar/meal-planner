@@ -14,7 +14,84 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(uuid())
-  email String @unique
-  name  String
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  meals     Meal[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Food {
+  id               String            @id @default(uuid())
+  name             String            @unique
+  calories         Float?
+  protein          Float?
+  fat              Float?
+  carbohydrates    Float?
+  fiber            Float?
+  categoryId       String
+  category         Category?         @relation(fields: [categoryId], references: [id])
+  foodServingUnits FoodServingUnit[]
+  meals            Meal[]
+  meadFoods        MeadFood[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  foods     Food[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SeringUnit {
+  id               String            @id @default(uuid())
+  name             String            @unique
+  foodServingUnits FoodServingUnit[]
+  meadFoods        MeadFood[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model FoodServingUnit {
+  id            String     @id @default(uuid())
+  foodId        String
+  food          Food       @relation(fields: [foodId], references: [id])
+  servingUnitId String
+  servingUnit   SeringUnit @relation(fields: [servingUnitId], references: [id])
+  grams         Float?
+}
+
+model Meal {
+  id        String     @id @default(uuid())
+  dateTime  DateTime
+  foods     Food[]
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  meadFoods MeadFood[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model MeadFood {
+  id            String     @id @default(uuid())
+  foodId        String
+  food          Food       @relation(fields: [foodId], references: [id])
+  mealId        String
+  meal          Meal       @relation(fields: [mealId], references: [id])
+  servingUnitId String
+  servingUnit   SeringUnit @relation(fields: [servingUnitId], references: [id])
+  amount        Float
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
