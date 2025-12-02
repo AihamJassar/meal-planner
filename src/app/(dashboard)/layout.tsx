@@ -1,9 +1,27 @@
 "use client";
 import { RouteGroup } from "@/components/dashboard/route-group";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { Apple, Boxes, ChevronLeft, Menu, Ruler, Utensils } from "lucide-react";
+import {
+  Apple,
+  Boxes,
+  ChevronLeft,
+  LogOut,
+  Menu,
+  Ruler,
+  Utensils,
+} from "lucide-react";
 import { ReactNode, useState } from "react";
 
 const ROUTE_GROUPS: RouteGroup[] = [
@@ -46,6 +64,8 @@ type LayoutProps = {
 export default function Layout({ children }: LayoutProps) {
   const [open, setOpen] = useState(false);
 
+  const handleLogout = () => console.log("Handle logout");
+
   return (
     <div className="flex">
       {/* Header */}
@@ -61,6 +81,45 @@ export default function Layout({ children }: LayoutProps) {
             </Button>
           </Collapsible.Trigger>
         </Collapsible.Root>
+
+        <div className="flex gap-2">
+          <ThemeToggle />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant={"ghost"}
+                className="gap-2r flex h-9 items-center px-2"
+              >
+                <Avatar className="size-8">
+                  <AvatarFallback>A</AvatarFallback>
+                </Avatar>
+                <span className="hidden md:inline">Admin</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="flex items-center gap-3 px-2 py-1.5">
+                <Avatar className="size-10">
+                  <AvatarFallback>A</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium">Admin</p>
+                  <p className="text-muted-foreground text-xs">
+                    admin@example.com
+                  </p>
+                </div>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => handleLogout}
+                variant="destructive"
+              >
+                <LogOut className="size-4" /> Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       {/* Sidebar */}
