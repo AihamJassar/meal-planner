@@ -1,3 +1,3 @@
 export default function Page() {
-    return <></>
+    return <h1>Admin</h1>
 }
