@@ -35,6 +35,10 @@ export const deleteCategory = async (id: number) => {
   });
 };
 
+export const getCategories = async () => {
+  return await prisma.category.findMany();
+}
+
 export const getCategory = async (id: number): Promise<CategorySchema> => {
   const res = await prisma.category.findFirst({ where: { id } });
 
